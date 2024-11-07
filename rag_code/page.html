@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interview Question Generator</title>
+</head>
+<body>
+    <h1>면접 준비를 위한 예상 질문 생성기</h1>
+    <textarea id="self_intro" placeholder="자기소개서를 입력하세요" rows="10" cols="50"></textarea>
+    <button onclick="generateQuestions()">질문 생성</button>
+
+    <h2>예상 질문</h2>
+    <p id="generated_question">여기에 예상 질문이 표시됩니다.</p>
+
+    <script>
+        async function generateQuestions() {
+            const selfIntro = document.getElementById("self_intro").value;
+
+            const response = await fetch("http://localhost:8000/generate_questions", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ self_intro: selfIntro })
+            });
+
+            const data = await response.json();
+            document.getElementById("generated_question").innerText = data.question;
+        }
+    </script>
+</body>
+</html>
