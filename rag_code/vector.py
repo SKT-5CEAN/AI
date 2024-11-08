@@ -6,7 +6,7 @@ import sys
 # '5CEAN_MVP/자기소개서' 경로를 Python 경로에 추가
 sys.path.append('/Users/zeegun/5CEAN_MVP/자기소개서')
 #파일 연결
-from rag_code.embed import get_embedding
+from 자기소개서.rag_code.app.embed import get_embedding
 
 # 각 데이터셋 JSON 파일 경로
 single_pairs_path = "/Users/zeegun/5CEAN_MVP/자기소개서/data/final_data.json"
