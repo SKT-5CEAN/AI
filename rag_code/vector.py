@@ -6,7 +6,7 @@ import sys
 # '5CEAN_MVP/자기소개서' 경로를 Python 경로에 추가
 sys.path.append('/Users/zeegun/5CEAN_MVP/자기소개서')
 #파일 연결
-from 자기소개서.rag_code.app.embed import get_embedding
+from rag_code.app.embed import get_embedding
 
 # 각 데이터셋 JSON 파일 경로
 single_pairs_path = "/Users/zeegun/5CEAN_MVP/자기소개서/data/final_data.json"
@@ -16,7 +16,6 @@ qa_pairs_path = "/Users/zeegun/5CEAN_MVP/자기소개서/data/whole_data/train_t
 
 # 원격 ChromaDB 서버에 HttpClient로 연결
 client = chromadb.PersistentClient(path="./data/chromadb_storage")
-
 # 하나의 컬렉션 생성 / 한번 만들어서 get
 collection = client.create_collection("interview_data")
 
@@ -69,7 +68,7 @@ def add_data_to_collection(collection, data, id_prefix):
                 "질문": item["question"],
                 "답변": item["answer"]
             }
-        
+
         # 임베딩 생성 및 컬렉션에 추가
         embedding = get_embedding(text)
         # embedding이 None이 아닌 경우에만 tolist()를 호출
@@ -79,8 +78,8 @@ def add_data_to_collection(collection, data, id_prefix):
         else:
             print(f"Embedding for question '{text}' is None and was not added.")
 
-# 데이터 로드
 
+# 데이터 로드
 with open(single_pairs_path, "r", encoding="utf-8") as f:
     single_pairs = json.load(f)
     add_data_to_collection(collection, single_pairs, "single")
@@ -97,8 +96,3 @@ with open(qa_pairs_path, "r", encoding="utf-8") as f:
     qa_pairs = json.load(f)
     add_data_to_collection(collection, qa_pairs, "qa")
 
-
-def search(query, k=3):
-    query_embedding = get_embedding(query).tolist()
-    results = collection.query(query_embeddings=[query_embedding], n_results=k)
-    return [(res["question"], res["distance"]) for res in results["metadatas"][0]]
